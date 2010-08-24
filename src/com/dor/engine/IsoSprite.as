@@ -1,7 +1,37 @@
 package com.dor.engine {
-    import flash.events.IEventDispatcher;
 
-    public class IsoObject {
+    import flash.events.IEventDispatcher;
+    import flash.display.Bitmap;
+
+    public class IsoSprite {
+
+        private static var _IDCount : uint = 0;
+
+        private const UID : uint = _IDCount++;
+
+        private var _id : String;
+
+		public function get id() : String {
+			return (_id == null || _id == "") ? "node_" + UID.toString() : _id;
+		}
+
+		public function set id(id : String) : void {
+			_id = id;
+		}
+
+        private var _parent : IsoLayer;
+
+		public function get parent() : IsoLayer {
+			return _parent;
+		}
+
+		public function set parent(parent : IsoLayer) : void {
+			_parent = parent;
+		}
+
+		public function get hasParent() : Boolean {
+			return _parent ? true : false;
+		}
 
         public var x : Number = 0;
 
@@ -47,9 +77,9 @@ package com.dor.engine {
 
         protected var pos_validated : Boolean = false;
 
-        protected var img_validated : Boolean = false;
-
         protected var size_validated : Boolean = false;
+
+        protected var img_validated : Boolean = false;
 
         public function get validated() : Boolean {
             return pos_validated && img_validated;
@@ -57,12 +87,14 @@ package com.dor.engine {
 
         public var mouseEnabled : Boolean = false;
 
-        public function IsoObject() : void {
+        public function IsoSprite() : void {
         }
 
         public function render() : void {
 
         }
+
+        public var bitmap : Bitmap;
 
         public function get renderData() : RenderData {
             return null;
