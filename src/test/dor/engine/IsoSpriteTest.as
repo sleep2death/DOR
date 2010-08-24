@@ -5,7 +5,7 @@ package test.dor.engine{
         private var obj : IsoSprite;
         private var layer : IsoLayer;
 
-        public function IsoObjectTest() : void {
+        public function IsoSpriteTest() : void {
             layer = new IsoLayer();
             obj = new IsoSprite();        
 
