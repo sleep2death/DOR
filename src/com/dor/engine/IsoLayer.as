@@ -23,11 +23,11 @@ package com.dor.engine {
 
         protected var children : Array = new Array();
 
-		public function addChild(child : IsoSprite, broadcast : Boolean = false) : void {
-			addChildAt(child, numChildren, broadcast);
+		public function addChild(child : IsoSprite) : void {
+			addChildAt(child, numChildren);
 		}
 
-		public function addChildAt(child : IsoSprite, index : uint, broadcast : Boolean = false) : void {
+		public function addChildAt(child : IsoSprite, index : uint) : void {
 			if (child.parent) {
 				var parent : IsoLayer = child.parent;
 				parent.removeChildByID(child.id);
@@ -35,18 +35,28 @@ package com.dor.engine {
 			
 			IsoSprite(child).parent = this;
 			children.splice(index, 0, child);
+
+            if(index > container.numChildren) index = container.numChildren;
+
+            var p : Sprite = child.view.parent as Sprite;
+            if(p && p != container)
+                p.removeChild(child.view);
+
+            container.addChildAt(child.view, index);
 			
-            if(broadcast){
+            /*if(broadcast){
                 var evt : IsoEvent = new IsoEvent(IsoEvent.CHILD_ADDED);
                 evt.newValue = child;
                 
                 dispatchEvent(evt);
             }
+            */
 		}
 
 		public function getChildByID(id : String) : IsoSprite {
 			var childID : String;
 			var child : IsoSprite;
+
 			for each (child in children) {
 				childID = child.id;
 				if (childID == id)
@@ -65,11 +75,11 @@ package com.dor.engine {
 		}
 
 		public function getChildIndex(child : IsoSprite) : int {
-			var i : int;
+			var i : int = 0;
+
 			while (i < numChildren) {
 				if (child == children[i])
 					return i;
-				
 				i++;
 			}
 			
@@ -85,26 +95,13 @@ package com.dor.engine {
 			if (i > -1)
 			{
 				children.splice(i, 1);
-				
-				var c:IsoSprite;
-				var notRemoved:Boolean = false;
-				for each (c in children)
-				{
-					if (c == child)
-						notRemoved = true;
-				}
-				
-				if (notRemoved)
-				{
-					throw new Error("");
-					return;
-				}
-				
+
 				if (index >= numChildren)
 					children.push(child);
-				
 				else
 					children.splice(index, 0, child);
+
+                if(container.contains(child.view)) container.setChildIndex(child.view, index);
 			}
 			
 			else
@@ -133,15 +130,15 @@ package com.dor.engine {
 			var child : IsoSprite;
 			if (index >= numChildren)
 				return null;
-				
 			else
 				child = IsoSprite(children[index]);
 				
 			return removeChildByID(child.id);
 		}
 
-		public function removeChildByID(id : String, broadcast : Boolean = false) : IsoSprite {
+		public function removeChildByID(id : String) : IsoSprite {
 			var child : IsoSprite = getChildByID(id);
+
 			if (child) {
 				IsoSprite(child).parent = null;
 				
@@ -152,13 +149,17 @@ package com.dor.engine {
 						break;
 					}
 				}
+
+                var p : Sprite = child.view.parent as Sprite;
+                if(p && p == container)
+                    p.removeChild(child.view);
 				
-                if(broadcast){
+                /*if(broadcast){
                     var evt : IsoEvent = new IsoEvent(IsoEvent.CHILD_REMOVED);
                     evt.newValue = child;
                     
                     dispatchEvent(evt);
-                }
+                }*/
 			}
 			
 			return child;

@@ -6,6 +6,7 @@ package {
 
         public function Suit() : void{
             var test : IsoSpriteTest = new IsoSpriteTest();            
+            addChild(test);
         }
 
     }

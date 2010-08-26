@@ -1,7 +1,7 @@
 package com.dor.engine {
 
     import flash.events.IEventDispatcher;
-    import flash.display.Bitmap;
+    import flash.display.Shape;
 
     public class IsoSprite {
 
@@ -94,7 +94,7 @@ package com.dor.engine {
 
         }
 
-        public var bitmap : Bitmap;
+        public var view : Shape = new Shape();
 
         public function get renderData() : RenderData {
             return null;
