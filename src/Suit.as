@@ -1,12 +1,12 @@
 package {
     import flash.display.Sprite;
-    import test.dor.engine.IsoSpriteTest;
+    import test.dor.iso.IsoSpriteFromExternalTest;
 
     public class Suit extends Sprite {
 
         public function Suit() : void{
-            var test : IsoSpriteTest = new IsoSpriteTest();            
-            addChild(test);
+            var external_sprite_test : IsoSpriteFromExternalTest = new IsoSpriteFromExternalTest();
+            addChild(external_sprite_test);
         }
 
     }
